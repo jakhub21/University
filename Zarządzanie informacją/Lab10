@@ -1,0 +1,65 @@
+1a) 
+
+SELECT count(*) AS `ile`, sum(priceEach*quantityOrdered) AS `wartosc`, orderNumber FROM `orderdetails` GROUP by orderNumber
+
+1b) 
+
+EXPLAIN SELECT count(*) AS `ile`, sum(priceEach*quantityOrdered) AS `wartosc`, orderNumber FROM `orderdetails` GROUP by orderNumber
+
+1c) 
+
+CREATE VIEW wartoscizamowien AS select count(*) as `ile`, sum(priceEach*quantityOrdered) as `wartosc`, orderNumber FROM `orderdetails` GROUP by orderNumber
+
+1d) 
+
+SELECT * FROM `wartoscizamowien`
+
+SELECT * FROM `wartoscizamowien` WHERE ile < 10
+
+1f) 
+
+SELECT ile, wartosc, wz.orderNumber, orderDate, status FROM `wartoscizamowien` AS wz JOIN orders AS o ON o.orderNumber=wz.orderNumber
+
+  
+
+2a) 
+
+SELECT count(*) as ile, quantityOrdered FROM `orderdetails` GROUP BY quantityOrdered ORDER by quantityOrdered
+
+2b) 
+
+EXPLAIN SELECT count(*) AS ile, quantityOrdered FROM `orderdetails` WHERE 1 group by quantityOrdered ORDER by quantityOrdered
+
+2c) 
+
+ALTER TABLE `orderdetails` ADD INDEX (`quantityOrdered`);
+
+2d) 
+
+CREATE VIEW quantityorderderdcounts  AS SELECT count(*) as ile, quantityOrdered FROM `orderdetails` group by quantityOrdered ORDER by quantityOrdered
+
+ 
+
+3a)
+
+ALTER TABLE `offices` ADD INDEX `countrystateindex` (`country`, `state`);
+
+ 
+
+4) 
+
+ALTER TABLE `customers` ADD UNIQUE (`contactLastName`, `contactFirstName`, `phone`);
+
+ 
+
+5a) 
+
+CREATE VIEW favoritecountries (country) AS SELECT 'Poland' UNION SELECT 'Spain' UNION SELECT 'Sweden'
+
+5b) 
+
+CREATE OR REPLACE VIEW favoritecountries (country) AS SELECT 'Poland' UNION SELECT 'Portugal' UNION SELECT 'Singapore'
+
+5c) 
+
+SELECT * FROM `customers` WHERE `country` in (SELECT `country` FROM `favoritecountries`)

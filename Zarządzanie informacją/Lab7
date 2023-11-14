@@ -1,0 +1,127 @@
+ZAD 1
+
+SELECT `customerNumber`,`postalCode`,
+CONVERT(`postalCode`,DATE) AS
+postalCodeDate
+FROM `customers` 
+WHERE `postalCode` IS NOT NULL
+ORDER BY postalCodeDate
+
+ZAD2
+
+SELECT `customerNumber`,`postalCode`,CAST(`postalCode` AS TIME) AS postalCodeTime
+FROM `customers` 
+WHERE `postalCode` IS NOT NULL
+ORDER BY postalCodeTime
+
+
+ZAD3
+
+SELECT ABS(`buyPrice` - `MSRP`)
+FROM `products`
+WHERE `productCode` = "S18_4027"
+
+ZAD4
+
+SELECT TRUNCATE( POW( `buyPrice` , 3 ) , 2 )
+FROM `products`
+WHERE `productCode` = "S24_2972"
+
+ZAD5
+
+SELECT ROUND(SQRT(SUM(`amount`)),4) 
+FROM `payments` 
+WHERE `customerNumber` = 131
+
+ZAD6
+
+SELECT POW(COUNT(*),1/3) 
+FROM `payments` 
+WHERE `customerNumber` = 124
+
+ZAD7
+
+SELECT city
+FROM `offices`
+WHERE EXISTS (
+SELECT *
+FROM employees
+WHERE `employees`.`officeCode` = `offices`.`officeCode`
+AND jobTitle != 'Sales Rep'
+)
+
+ZAD8
+
+SELECT `productName`
+FROM `products`
+WHERE EXISTS (
+
+SELECT *
+FROM `orderdetails`
+WHERE `orderdetails`.`productCode` = `products`.`productCode`
+AND `quantityOrdered` >=90
+)
+
+zad9
+
+SELECT COUNT( * )
+FROM (
+SELECT *
+FROM `customers`
+WHERE MOD( customerNumber, 2 ) =1
+) AS customers
+
+zad10
+
+SELECT TRUNCATE ( SUM( quantityInStock * buyPrice ),0) AS SUM
+FROM `products`
+
+zad10a
+SELECT TRUNCATE (SUM( quantityInStock * buyPrice ),0) AS SUM, SUM( ROUND( `quantityInStock` ) * ROUND( `buyPrice` ) ) AS SUM_ROUND
+FROM `products`
+
+
+zad10B
+SELECT TRUNCATE ( SUM( quantityInStock * buyPrice ),0) AS SUM, SUM( ROUND( `quantityInStock` ) * ROUND( `buyPrice` ) ) AS SUM_ROUND, SUM( CEIL( `quantityInStock` ) * CEIL( `buyPrice` ) ) AS SUM_CEIL
+FROM `products`
+
+ZAD10C
+SELECT TRUNCATE ( SUM( quantityInStock * buyPrice ),0) AS SUM, SUM( ROUND( `quantityInStock` ) * ROUND( `buyPrice` ) ) AS SUM_ROUND, SUM( CEIL( `quantityInStock` ) * CEIL( `buyPrice` ) ) AS SUM_CEIL, SUM( FLOOR( `quantityInStock` ) * FLOOR( `buyPrice` ) ) AS SUM_FLOOR
+FROM `products`
+
+CEIL- zaokragla w gore
+FLOOR- zaokragla w dol
+ROUND-zaokraglanie do najblizszej liczby lub po podaniu po przecinku, do danej liczby miejsc po przecinku
+
+
+1)
+SELECT `productName` 
+FROM `products` 
+WHERE EXISTS 
+(SELECT *
+ FROM orderdetails
+ WHERE products.`productCode`=orderdetails.`productCode` AND quantityOrdered < 10)
+
+2)
+SELECT ROUND(POW(`MSRP`,1/2))
+FROM `products` 
+WHERE `productCode` = 'S18_4027' 
+
+3)
+SELECT SUM(CEIL(`amount`)) 
+FROM `payments` 
+
+4)
+SELECT `email` 
+FROM 
+(SELECT *
+ FROM employees
+ WHERE MOD(`employeeNumber`,2) = 1) AS c
+
+ 5)
+SELECT SUM(quantityOrdered*priceEach)
+FROM orderdetails
+WHERE EXISTS
+(SELECT *
+FROM orders
+WHERE orderdetails.orderNumber = orders.orderNumber AND customerNumber = "129")

@@ -1,0 +1,141 @@
+zad 1
+kwerenda:
+for $x in /bookstore//book
+where $x/price>50 and $x/year>1980
+order by $x/year
+return <p>{$x/title}, {$x/year}, {$x/price}</p>
+
+
+odp:
+The Wind-Up Bird Chronicle, 1994, 55.99
+In the miso soup, 2005, 100.00
+
+zad 2
+kwerenda:
+for $x at $i in /bookstore//book
+where not ($x/title/@lang) and not ($x/title/@language)
+order by $i
+return <p>{$i}, {$x/author}, {$x/title}</p>
+
+odp:
+1, Frank Herbert, Dune
+8, Stephen King, The Shining
+9, Ryū Murakami, In the miso soup
+11, , Discipline
+12, , Discipline II
+
+zad 3
+kwerenda:
+for $x in /bookstore/shelves
+return avg($x/book//price)
+
+odp:
+31.57
+
+zad 4
+kwerenda:
+for $x in /bookstore//book
+where starts-with($x/title, "The")
+order by $x/price
+return <p>{$x/title}, {$x/year}, {$x/price}</p>
+
+odp:
+The Dark Tower: The Gunslinger, 1987, 30.00
+The Dark Tower II: The Drawing of the Three, 1982, 30.99
+The Lord of the Rings, 1954, 45.00
+The Shining, 1977, 45.00
+The Wind-Up Bird Chronicle, 1994, 55.99
+
+zad 5
+kwerenda:
+for $x at $i in /bookstore//book
+where contains($x/@category,"horror")
+order by $x/price
+return <p>{$i}, {$x/title}, {$x/year}</p>
+
+odp:
+6, The Dark Tower: The Gunslinger, 1987
+7, The Dark Tower II: The Drawing of the Three, 1982
+8, The Shining, 1977
+
+zad 6
+kwerenda:
+for $x in bookstore/*/*
+return <li>{$x/author}({$x/year}), {$x/title}</li>
+
+odp:
+Frank Herbert(1965), Dune
+J. R. R. Tolkien(1954), The Lord of the Rings
+Winston Groom(1986), Forrest Gump
+Jacek Dukaj(2004), Perfekcyjna Niedoskonałość
+Jacek Doe(2000), Robot Bob
+Stephen King(1987), The Dark Tower: The Gunslinger
+Stephen King(1982), The Dark Tower II: The Drawing of the Three
+John Doe(1991), How to program stuff
+Stephen King(1977), The Shining
+John Brooklyn Sawyer(1992), How to program other stuff
+Ryū Murakami(2005), In the miso soup
+Haruki Murakami(1994), The Wind-Up Bird Chronicle
+Bethany Covenant(1998), How to prepare your garden for Eternal Autumn
+(), Discipline
+(), Discipline II
+(1854), Heavy matter
+(), Codex Nitriensis
+(), Codex Zacynthius
+(), Codex X
+
+zad 7 
+a)
+kwerenda:
+for $x in bookstore/*/book
+where $x/price < 30
+order by $x/title
+return <li>{$x/title}, stara cena: {$x/price}, nowa cena: {double($x/price)*0.8}</li>
+
+odp:
+Forrest Gump, stara cena: 20.00, nowa cena: 16
+Robot Bob, stara cena: 15.00, nowa cena: 12
+
+b)
+kwerenda:
+for $x in bookstore/*/book
+return if ($x/price < 30)
+      then <li>{$x/title}, stara cena: {$x/price}, nowa cena: {double($x/price)*0.8}</li>
+      else <li>{$x/title}, stara cena: {$x/price}</li>
+
+odp:
+Dune, stara cena: 45.00
+The Lord of the Rings, stara cena: 45.00
+Forrest Gump, stara cena: 20.00, nowa cena: 16
+Perfekcyjna Niedoskonałość, stara cena: 35.00
+Robot Bob, stara cena: 15.00, nowa cena: 12
+The Dark Tower: The Gunslinger, stara cena: 30.00
+The Dark Tower II: The Drawing of the Three, stara cena: 30.99
+The Shining, stara cena: 45.00
+In the miso soup, stara cena: 100.00
+The Wind-Up Bird Chronicle, stara cena: 55.99
+Discipline, stara cena: 120.00
+Discipline II, stara cena: 125.00
+Heavy matter, stara cena: 99.00
+
+zad 8 
+kwerenda:
+let $shelves := bookstore/shelves
+return <price-list>{
+  for $x in $shelves/*
+  return <price>
+  {$x/price}</price>
+  }
+  {sum($shelves/*/price)}
+</price-list>
+
+odp:
+45.00
+45.00
+20.00
+35.00
+15.00
+30.00
+30.99
+10.00
+230.99

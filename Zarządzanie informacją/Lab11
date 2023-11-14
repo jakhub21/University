@@ -1,0 +1,84 @@
+1a)
+
+CREATE OR REPLACE FUNCTION contactPerson(customerNumber INT)
+RETURNS VARCHAR(100)
+DETERMINISTIC
+RETURN (
+   SELECT concat(`contactFirstName`, ' ', `contactLastName`)
+   FROM `customers`
+   WHERE customers.customerNumber=customerNumber 
+);
+
+1b)
+
+SELECT contactPerson(`customerNumber`), `contactFirstName`, `contactLastName` FROM `customers`
+
+2a)
+
+CREATE OR REPLACE FUNCTION limitKredytowy(wartosc DOUBLE)
+RETURNS VARCHAR(30)
+DETERMINISTIC 
+RETURN (
+     SELECT CASE
+         WHEN wartosc < 100000 THEN 'mały'
+         WHEN wartosc >= 100000 AND wartosc < 200000 THEN 'średni'
+         ELSE 'duży'
+     END
+)
+
+2b)
+
+DELIMITER //
+CREATE OR REPLACE FUNCTION limitKredytowy(wartosc DOUBLE)
+RETURNS VARCHAR(30)
+DETERMINISTIC
+BEGIN
+    CASE
+       WHEN wartosc < 100000 THEN RETURN 'mały';
+       WHEN wartosc >= 100000 AND wartosc < 200000 THEN RETURN 'średni';
+       ELSE RETURN 'duży';
+    END CASE;
+END //
+DELIMITER ;
+
+2c) 
+
+DELIMITER //
+CREATE OR REPLACE FUNCTION limitKredytowy(wartosc DOUBLE)
+RETURNS VARCHAR(30)
+DETERMINISTIC
+BEGIN
+    DECLARE okreslenie VARCHAR(20);
+    CASE
+       WHEN wartosc < 100000 THEN SET okreslenie = 'mały';
+       WHEN wartosc >= 100000 AND wartosc < 200000 THEN SET okreslenie = 'średni';
+       ELSE SET okreslenie = 'duży';
+    END CASE;
+    RETURN okreslenie;
+END //
+DELIMITER ;
+
+3)
+SELECT customerName, creditLimit, limitKredytowy(
+creditLimit
+) AS limitKredytowy
+FROM customers
+
+4)
+
+5)
+
+DELIMITER //
+CREATE OR REPLACE FUNCTION oblicz(a DOUBLE, b DOUBLE)
+RETURNS DOUBLE
+DETERMINISTIC
+BEGIN
+    DECLARE wynik DOUBLE;
+    SET wynik = (a+b) * (2 * a + b);
+    SET wynik = mod(wynik, 10);
+    IF wynik < 5 THEN SET wynik = wynik/10;
+    ELSE SET wynik = (1 + (wynik/10));
+    END IF;
+    RETURN wynik;
+END //
+DELIMITER ;

@@ -1,0 +1,58 @@
+zad1
+a)
+SELECT DATE_FORMAT( DATE_ADD( CURDATE( ) , INTERVAL 120
+DAY ) , '%d,%M,%Y' ) AS 'Data za 120 dni', DAYNAME( DATE_ADD( CURDATE( ) , INTERVAL 120
+DAY ) ) AS 'Dzień tygodnia'
+
+b)
+SELECT DATE_FORMAT( DATE( CONCAT( YEAR( CURRENT_DATE( ) ) , '-01-01' ) ) + INTERVAL 204
+DAY , '%W' ) AS
+DAY
+
+c)
+SELECT DATE_SUB( CURDATE( ) , INTERVAL 15 WEEK ) AS 'Data po odjęciu 15 tygodni'
+
+zad2
+a)
+SELECT CONCAT( DATE_FORMAT( orderDate, '%Y, ' ) , 
+UPPER( DATE_FORMAT( orderDate, '%M ' ) ) , DATE_FORMAT( orderDate, '%D' ) , '-- ', 
+UPPER( DATE_FORMAT( orderDate, '%W' ) ) ) AS 'Data'
+FROM orders
+
+b)
+SELECT DATE_FORMAT( paymentDate, '%Y %M, %W' ) AS 'Data sformatowana'
+FROM payments
+
+ZAD3
+SELECT TIMEDIFF( '23:31:10', '12:01:20' ) AS 'Czas różnicy'
+
+Zad.4.
+SELECT orderNumber AS 'Nr zamówienia', DATE_FORMAT( orderDate, '%W %Y.%M.%d' ) AS 'Data zamówienia',
+STATUS FROM `orders`
+WHERE DAYOFWEEK( orderDate ) =6
+ORDER BY MONTH( orderDate )
+
+Zad.5.
+SELECT YEAR( orderDate ) AS 'rok', WEEKOFYEAR( orderDate ) AS 'numer tygodnia', COUNT( OrderDate ) AS 'ilość zamówień'
+FROM `orders`
+WHERE (
+WEEKOFYEAR( orderDate )
+BETWEEN 12
+AND 15
+)
+GROUP BY YEAR( orderDate ) , WEEKOFYEAR( orderDate )
+
+Zad.6.
+SELECT payments.customerNumber, customers.customerName AS 'klient', payments.amount AS 'kwota'
+FROM `payments`
+INNER JOIN customers ON payments.customerNumber = customers.customerNumber
+WHERE QUARTER( payments.paymentDate ) =4
+ORDER BY payments.amount DESC
+LIMIT 5
+
+Zad.7.
+SELECT `orderNumber` , DATE_FORMAT( `orderDate` , '%d.%m.%Y' ) AS 'Data zamówienia', DATE_FORMAT( `shippedDate` , '%Y-%m-%d' ) , DATEDIFF( `shippedDate` , `orderDate` ) AS 'Dni do wysyłki'
+FROM `orders`
+WHERE `shippedDate` IS NOT NULL
+ORDER BY `Dni do wysyłki` DESC
+LIMIT 5

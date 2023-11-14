@@ -1,0 +1,41 @@
+zadanie 3
+
+CREATE TABLE Zamowienia_1NF (NumerZam int,NazwaKlienta varchar(50),Adres varchar(100),KodPocztowy varchar(10),Miejscowosc varchar(100),Wojewodztwo varchar(100),DataZamowienia date,Produkt varchar(50),Ilosc int,Koszt decimal(10, 2)
+);
+
+
+Zadanie 4
+
+CREATE TABLE Klient_2NF(
+NumerKlienta INT,
+NazwaKlienta VARCHAR( 100 ) ,
+Adres VARCHAR( 100 ) ,
+KodPocztowy VARCHAR( 10 ) ,
+Miejscowosc VARCHAR( 100 ) ,
+Wojewodztwo VARCHAR( 100 ) ,
+PRIMARY KEY ( NumerKlienta )
+);
+
+CREATE TABLE Zamowienia_2NF(
+NumerZam INT,
+NumerKlienta INT,
+DataZamowienia DATE,
+PRIMARY KEY ( NumerZam )
+);
+
+CREATE TABLE Produkty_2NF(
+idProdukt INT,
+Produkt VARCHAR( 50 ) ,
+PRIMARY KEY ( idProdukt )
+);
+
+CREATE TABLE DetaleZamowien_2NF(
+NumerZam INT,
+idProdukt INT,
+Ilosc INT,
+Koszt DECIMAL( 10, 2 ) ,
+PRIMARY KEY ( NumerZam, idProdukt )
+)
+
+CREATE TABLE DetaleZamowien_3NF(NumerZam int,idProdukt int,Ilosc int,PRIMARY KEY (NumerZam, idProdukt);
+
